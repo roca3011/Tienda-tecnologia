@@ -66,7 +66,10 @@ public class Vendedor {
     	double precioGarantia = producto.getPrecio(); 
     	
     	/**Se obtiene la fecha actual*/
-    	Date fechaSolicitudGarantia = Calendar.getInstance().getTime();
+    	Date hoy=new Date();
+    	Calendar calfechaActual= Calendar.getInstance();
+    	calfechaActual.setTime(hoy);
+    	Date fechaSolicitudGarantia = calfechaActual.getTime();
     	
     	/**Se crea el objeto calendar para la fecha fin de garantia*/
     	Calendar CalendaFinGarantia;
@@ -100,17 +103,16 @@ public class Vendedor {
     public Calendar calcularFechaGarantia(int diasGarantia){    	
     	
     	Date hoy=new Date();
-    	Calendar cal= Calendar.getInstance();
-    	cal.setTime(hoy);
+    	Calendar calfechaActual= Calendar.getInstance();
+    	calfechaActual.setTime(hoy);
     	Calendar fechaFinGarantia;
     	int diasExtra = 0;
     	
     	if (diasGarantia == DIAS_GARANTIA_200) {
-    		diasExtra = calcularDiasExtra(diasGarantia, cal.get(Calendar.DAY_OF_WEEK));
+    		diasExtra = calcularDiasExtra(diasGarantia, calfechaActual.get(Calendar.DAY_OF_WEEK));
     		diasGarantia = diasGarantia+ diasExtra;
 		}    	
-    	
-    	fechaFinGarantia = (Calendar) cal.clone();
+    	fechaFinGarantia = (Calendar) calfechaActual.clone();
     	fechaFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia);    	
     	
     	return fechaFinGarantia;
@@ -121,7 +123,7 @@ public class Vendedor {
      * 1- Si dìa actual es lunes +1 
      * 2- Si los dìas restantes de la semana son mayor o igual
      * 	  al los dìas que actualmente faltan para ser lunes +1*/
-    private int calcularDiasExtra(int diasGarantia, int diaActual){
+    public int calcularDiasExtra(int diasGarantia, int diaActual){
     	
     	int Semanas=diasGarantia/DIAS_DE_LA_SEMANA;
         int diasFaltantes=diasGarantia%DIAS_DE_LA_SEMANA;
@@ -131,14 +133,14 @@ public class Vendedor {
         
         /**Si el dìa actual es lunes se suma 1 dia a la garantìa*/
     	if (diaActual == DIA_DE_LA_SEMANA) {
-    		diasExtra = diasGarantia +1;
+    		diasExtra = diasExtra +1;
 		}    	
     	
     	/**Si los dias restantes de las semanas de los 200 dìas son
     	 * mayor o igual a los dìas que actualmente faltan para ser lunes
     	 * se suma 1 dìa mas*/
     	if (diasFaltantes >= diasFaltantesLunes) {
-    		diasExtra = diasGarantia +1;
+    		diasExtra = diasExtra +1;
 		}    	
     	
     	return diasExtra + Semanas;

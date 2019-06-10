@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dominio.unitaria.VendedorTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2019-06-10T06:47:49" hostname="Robert-CF" time="0.219">
+  <properties/>
+  <testcase name="calcularConGarantiadeDoscientosDiasTest" classname="dominio.unitaria.VendedorTest" time="0.188"/>
+  <testcase name="productoNoTieneGarantiaTest" classname="dominio.unitaria.VendedorTest" time="0.024"/>
+  <testcase name="ExceptionProductoNoAplicaGarantiaTest" classname="dominio.unitaria.VendedorTest" time="0.001"/>
+  <testcase name="productoYaTieneGarantiaTest" classname="dominio.unitaria.VendedorTest" time="0.001"/>
+  <testcase name="ExceptionProductoTieneGarantiaTest" classname="dominio.unitaria.VendedorTest" time="0.001"/>
+  <testcase name="calcularConGarantiadeCienDiasTest" classname="dominio.unitaria.VendedorTest" time="0.001"/>
+  <system-out><![CDATA[calendaioFinGarantia 2: Mon Jun 10 01:47:49 COT 2019
+fechaFinGarantia: 2020-01-25
+calcularfechaFinGarantia: Sat Jan 25 01:47:50 COT 2020
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

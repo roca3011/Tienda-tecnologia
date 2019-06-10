@@ -2,6 +2,7 @@ package dominio.integracion;
 
 import static org.junit.Assert.fail;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.junit.After;
@@ -106,11 +107,12 @@ public class VendedorTest {
 		// arrange
 		String nombreCliente = "Jhon Connor";	
 		double precio = 500000.0;
-		int diasGarantia = 100;				
+		int diasGarantia = 100;	
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");	
 		  	
 		Calendar calendaioFinGarantia = Calendar.getInstance();    	
 		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia);
-		String fechaFinGarantia = calendaioFinGarantia.getTime().toString();		
+		String fechaFinGarantia = format1.format(calendaioFinGarantia.getTime());		
 		
 		Producto producto = new ProductoTestDataBuilder().conPrecio(precio).build();
 		repositorioProducto.agregar(producto);
@@ -119,7 +121,7 @@ public class VendedorTest {
 		// act
 		vendedor.generarGarantia(producto.getCodigo(), nombreCliente);			
 		
-		String fechaRepositorio = repositorioGarantia.obtener(producto.getCodigo()).getFechaFinGarantia().toString();
+		String fechaRepositorio = format1.format(repositorioGarantia.obtener(producto.getCodigo()).getFechaFinGarantia());
 				
 		// assert
 		Assert.assertEquals(fechaFinGarantia, fechaRepositorio);
@@ -132,20 +134,26 @@ public class VendedorTest {
 		String nombreCliente = "Jhon Connor";	
 		double precio = 500001.0;
 		int diasGarantia = 200;	
-		int lunesExtra = 28;
-		  	
+		int diasExtra = 0;
+		
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");		  	
 		Calendar calendaioFinGarantia = Calendar.getInstance();    	
-		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia+lunesExtra);
-		String fechaFinGarantia = calendaioFinGarantia.getTime().toString();		
+				
 		
 		Producto producto = new ProductoTestDataBuilder().conPrecio(precio).build();
 		repositorioProducto.agregar(producto);
 		Vendedor vendedor = new Vendedor(repositorioProducto, repositorioGarantia);	
 		
+		diasExtra = vendedor.calcularDiasExtra(diasGarantia, calendaioFinGarantia.get(Calendar.DAY_OF_WEEK));
+		System.out.println("diasExtra: "+diasExtra);
+		
+		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia+diasExtra);
+		String fechaFinGarantia = format1.format(calendaioFinGarantia.getTime());
+		
 		// act
 		vendedor.generarGarantia(producto.getCodigo(), nombreCliente);			
 		
-		String fechaRepositorio = repositorioGarantia.obtener(producto.getCodigo()).getFechaFinGarantia().toString();
+		String fechaRepositorio = format1.format(repositorioGarantia.obtener(producto.getCodigo()).getFechaFinGarantia());
 				
 		// assert
 		Assert.assertEquals(fechaFinGarantia, fechaRepositorio);

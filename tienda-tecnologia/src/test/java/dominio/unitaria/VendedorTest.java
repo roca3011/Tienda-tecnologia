@@ -5,7 +5,10 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -106,42 +109,56 @@ public class VendedorTest {
 	public void calcularConGarantiadeCienDiasTest(){
 		
 		int diasGarantia = 100;
-		Calendar calendaioFinGarantia = Calendar.getInstance();    	
-		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia);
-		String fechaFinGarantia = calendaioFinGarantia.getTime().toString();
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");	
+		
+		Calendar calendaioFinGarantia = Calendar.getInstance();   		
 		
 		RepositorioGarantiaExtendida repositorioGarantia = mock(RepositorioGarantiaExtendida.class);
 		RepositorioProducto repositorioProducto = mock(RepositorioProducto.class);
 				
-		Vendedor vendedor = new Vendedor(repositorioProducto, repositorioGarantia);
+		Vendedor vendedor = new Vendedor(repositorioProducto, repositorioGarantia);		
+		
+		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia);
+		String fechaFinGarantia = format1.format(calendaioFinGarantia.getTime());//calendaioFinGarantia.getTime().toString();
 		
 		Calendar calcularfechaFinGarantia = vendedor.calcularFechaGarantia(diasGarantia);
 		
-		String calfechaFinGarantia = calcularfechaFinGarantia.getTime().toString();
+		String calfechaFinGarantia = format1.format(calcularfechaFinGarantia.getTime());
 		
 		Assert.assertEquals(fechaFinGarantia, calfechaFinGarantia);
 				
 	}
 	
 	@Test
-	public void calcularConGarantiadeDoscientosDiasTest(){
+	public void calcularConGarantiadeDoscientosDiasTest() throws ParseException{
 		
 		int diasGarantia = 200;
-		int lunesExtra = 28;
+		int diasExtra = 0;
+				
+		Calendar calendaioFinGarantia = Calendar.getInstance();
 		
-		Calendar calendaioFinGarantia = Calendar.getInstance();    	
-		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia+lunesExtra);
-		String fechaFinGarantia = calendaioFinGarantia.getTime().toString();
+		System.out.println("calendaioFinGarantia 2: "+calendaioFinGarantia.getTime());
+		
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");				
 		
 		RepositorioGarantiaExtendida repositorioGarantia = mock(RepositorioGarantiaExtendida.class);
 		RepositorioProducto repositorioProducto = mock(RepositorioProducto.class);
 				
 		Vendedor vendedor = new Vendedor(repositorioProducto, repositorioGarantia);
 		
+		diasExtra = vendedor.calcularDiasExtra(diasGarantia, calendaioFinGarantia.get(Calendar.DAY_OF_WEEK));
+		
+		calendaioFinGarantia.add(Calendar.DAY_OF_YEAR, + diasGarantia + diasExtra);
+		
+		String fechaFinGarantia = format1.format(calendaioFinGarantia.getTime());
+		System.out.println("fechaFinGarantia: "+fechaFinGarantia);		
+		
 		Calendar calcularfechaFinGarantia = vendedor.calcularFechaGarantia(diasGarantia);
 		
-		String calfechaFinGarantia = calcularfechaFinGarantia.getTime().toString();
+		System.out.println("calcularfechaFinGarantia: "+calcularfechaFinGarantia.getTime());
 		
+		String calfechaFinGarantia = format1.format(calcularfechaFinGarantia.getTime());//calcularfechaFinGarantia.getTime().toString();
+				
 		Assert.assertEquals(fechaFinGarantia, calfechaFinGarantia);
 				
 	}
